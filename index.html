@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Card | Digital Business Identity</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+</head>
+
+<body>
+    <div class="background-gradient"></div>
+
+    <header>
+        <div class="logo">
+            <i class="fa-solid fa-bolt"></i> Nexus Card
+        </div>
+        <nav>
+            <button id="qrConnectBtn" class="secondary-btn"><i class="fa-solid fa-qrcode"></i> QR Connect</button>
+            <button id="savedContactsBtn" class="secondary-btn"><i class="fa-solid fa-address-book"></i>
+                Contacts</button>
+            <button id="resetBtn" class="secondary-btn">Reset</button>
+            <button id="exportBtn" class="primary-btn">Export Data</button>
+        </nav>
+    </header>
+
+    <main class="app-container">
+        <!-- Saved Contacts Sidebar (Hidden by default) -->
+        <aside id="contactsSidebar" class="contacts-sidebar hidden">
+            <div class="sidebar-header">
+                <h3>Saved Contacts</h3>
+                <button id="closeContactsBtn" class="icon-btn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="contactsList" class="contacts-list">
+                <!-- Contacts will be injected here -->
+                <div class="empty-state">No contacts saved yet.</div>
+            </div>
+        </aside>
+
+        <section class="editor-panel">
+            <h2>Create Your Identity</h2>
+            <form id="cardForm">
+                <div class="form-group">
+                    <div class="label-row">
+                        <label for="fullName">Full Name</label>
+                    </div>
+                    <input type="text" id="fullName" placeholder="e.g. Alex Sterling" required>
+                </div>
+                <div class="form-group">
+                    <div class="label-row">
+                        <label for="jobTitle">Job Title</label>
+                        <label class="toggle-label"><input type="checkbox" class="hide-toggle"
+                                data-target="previewTitle"> Hide</label>
+                    </div>
+                    <input type="text" id="jobTitle" placeholder="e.g. Senior Product Designer">
+                </div>
+                <div class="form-group">
+                    <div class="label-row">
+                        <label for="company">Company</label>
+                        <label class="toggle-label"><input type="checkbox" class="hide-toggle"
+                                data-target="previewCompany"> Hide</label>
+                    </div>
+                    <input type="text" id="company" placeholder="e.g. Nexus Innovations">
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="form-group">
+                    <div class="label-row">
+                        <label for="email">Email</label>
+                        <label class="toggle-label"><input type="checkbox" class="hide-toggle"
+                                data-target="previewEmailItem"> Hide</label>
+                    </div>
+                    <input type="email" id="email" placeholder="alex@example.com">
+                </div>
+                <div class="form-group">
+                    <div class="label-row">
+                        <label for="phone">Phone</label>
+                        <label class="toggle-label"><input type="checkbox" class="hide-toggle"
+                                data-target="previewPhoneItem"> Hide</label>
+                    </div>
+                    <input type="tel" id="phone" placeholder="+1 (555) 000-0000">
+                </div>
+                <div class="form-group">
+                    <div class="label-row">
+                        <label for="website">Website</label>
+                        <label class="toggle-label"><input type="checkbox" class="hide-toggle"
+                                data-target="previewWebsiteItem"> Hide</label>
+                    </div>
+                    <input type="url" id="website" placeholder="https://alexsterling.design">
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="form-group">
+                    <label>Back of Card Design</label>
+                    <div class="image-picker">
+                        <button type="button" class="img-btn active" data-img="default" title="Nexus Default">
+                            <i class="fa-solid fa-bolt"></i>
+                        </button>
+                        <button type="button" class="img-btn" data-img="assets/blackhole.png"
+                            style="background-image: url('assets/blackhole.png');"></button>
+                        <button type="button" class="img-btn" data-img="assets/nebula.png"
+                            style="background-image: url('assets/nebula.png');"></button>
+                        <button type="button" class="img-btn" data-img="assets/supernova.png"
+                            style="background-image: url('assets/supernova.png');"></button>
+                        <button type="button" class="img-btn" data-img="assets/galaxy.png"
+                            style="background-image: url('assets/galaxy.png');"></button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="backText">Event / Location Context</label>
+                    <input type="text" id="backText" placeholder="e.g. TechCrunch 2025, SF">
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="form-group">
+                    <label for="colorTheme">Card Theme</label>
+                    <div class="color-picker">
+                        <button type="button" class="color-btn active"
+                            data-color="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+                            style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></button>
+                        <button type="button" class="color-btn"
+                            data-color="linear-gradient(135deg, #2af598 0%, #009efd 100%)"
+                            style="background: linear-gradient(135deg, #2af598 0%, #009efd 100%);"></button>
+                        <button type="button" class="color-btn"
+                            data-color="linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%)"
+                            style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);"></button>
+                        <button type="button" class="color-btn"
+                            data-color="linear-gradient(135deg, #434343 0%, black 100%)"
+                            style="background: linear-gradient(135deg, #434343 0%, black 100%);"></button>
+                    </div>
+                </div>
+            </form>
+        </section>
+
+        <section class="preview-panel">
+            <div class="card-container">
+                <div class="business-card" id="businessCard">
+                    <div class="card-inner">
+                        <!-- Front of Card -->
+                        <div class="card-face card-front">
+                            <div class="card-frame"></div> <!-- Decorative Frame -->
+                            <div class="card-content">
+                                <div class="card-header">
+                                    <div class="card-logo">
+                                        <i class="fa-solid fa-infinity"></i>
+                                    </div>
+                                    <div class="card-company" id="previewCompany">Nexus Innovations</div>
+                                </div>
+                                <div class="card-body">
+                                    <h1 id="previewName">Alex Sterling</h1>
+                                    <p id="previewTitle">Senior Product Designer</p>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="contact-item" id="previewPhoneItem">
+                                        <i class="fa-solid fa-phone"></i> <span id="previewPhone">+1 (555)
+                                            000-0000</span>
+                                    </div>
+                                    <div class="contact-item" id="previewEmailItem">
+                                        <i class="fa-solid fa-envelope"></i> <span
+                                            id="previewEmail">alex@example.com</span>
+                                    </div>
+                                    <div class="contact-item" id="previewWebsiteItem">
+                                        <i class="fa-solid fa-globe"></i> <span
+                                            id="previewWebsite">alexsterling.design</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-shine"></div>
+                            <div class="flip-hint"><i class="fa-solid fa-rotate"></i> Click to Flip</div>
+                        </div>
+
+                        <!-- Back of Card -->
+                        <div class="card-face card-back" id="cardBackFace">
+                            <div class="card-frame"></div>
+                            <div class="back-content-wrapper">
+                                <div class="back-logo" id="backLogo">
+                                    <i class="fa-solid fa-bolt"></i> Nexus
+                                </div>
+                                <div class="back-custom-text" id="previewBackText"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-grid">
+                <button id="shareBtn" class="action-card">
+                    <div class="icon-box"><i class="fa-solid fa-share-nodes"></i></div>
+                    <h3>Share</h3>
+                    <p>AirDrop & More</p>
+                </button>
+                <button id="flipBtn" class="action-card">
+                    <div class="icon-box"><i class="fa-solid fa-repeat"></i></div>
+                    <h3>Flip Card</h3>
+                    <p>View Back</p>
+                </button>
+                <button id="walletBtn" class="action-card">
+                    <div class="icon-box"><i class="fa-brands fa-apple"></i></div>
+                    <h3>Wallet</h3>
+                    <p>Add to Apple/Google</p>
+                </button>
+                <button id="vcardBtn" class="action-card">
+                    <div class="icon-box"><i class="fa-solid fa-address-card"></i></div>
+                    <h3>Save Contact</h3>
+                    <p>Download VCF</p>
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Unified QR Connect Modal -->
+    <div id="qrConnectModal" class="modal hidden">
+        <div class="modal-content qr-connect-content">
+            <span class="close-modal" id="closeQrConnect">&times;</span>
+
+            <div class="qr-tabs">
+                <button class="qr-tab-btn active" data-tab="my-code">My Code</button>
+                <button class="qr-tab-btn" data-tab="scan-code">Scan Camera</button>
+            </div>
+
+            <div class="qr-tab-content active" id="tab-my-code">
+                <h2>Your Digital Card</h2>
+                <div id="qrcode"></div>
+                <p>Share this code to connect</p>
+            </div>
+
+            <div class="qr-tab-content" id="tab-scan-code">
+                <h2>Scan Contact</h2>
+                <div id="reader" width="300px"></div>
+                <p>Point camera at a Nexus Card</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
