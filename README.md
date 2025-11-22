@@ -32,7 +32,7 @@ The "Add to Wallet" feature requires a backend server to cryptographically sign 
     npm install
     ```
 3.  **Configuration:**
-    *   You need an Apple Developer Account.
+    *   May need an Apple Developer Account.
     *   Obtain your Pass Type ID and Certificates.
     *   Place your `signer.pem`, `key.pem`, and `wwdr.pem` in a `keys` folder inside `backend`.
     *   Uncomment the code in `server.js`.
