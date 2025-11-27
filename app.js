@@ -448,10 +448,48 @@ END:VCARD`;
         });
     }
 
-    // 4. Wallet Integration (Simulation)
-    walletBtn.addEventListener('click', (e) => {
+    // 4. Wallet Integration
+    walletBtn.addEventListener('click', async (e) => {
         e.stopPropagation();
-        alert('Wallet Integration:\n\nTo generate a real Apple Wallet (.pkpass) or Google Wallet pass, a backend server with Developer Certificates is required.\n\nI have included the backend code structure in the "backend/" folder of this project. You can run it with Node.js to enable this feature.');
+        
+        const contactData = {
+            name: inputs.fullName.value || 'Alex Sterling',
+            title: inputs.jobTitle.value || 'Senior Product Designer',
+            company: inputs.company.value || 'Nexus Innovations',
+            email: inputs.email.value || '',
+            phone: inputs.phone.value || '',
+            website: inputs.website.value || ''
+        };
+
+        try {
+            const response = await fetch('/api/create-pass', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(contactData)
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.success) {
+                // If certificates are configured, this would download the .pkpass file
+                const blob = await response.blob();
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${contactData.name}.pkpass`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            } else {
+                // Show setup message
+                alert('Apple Wallet Integration:\n\n' + (result.message || 'To generate a real Apple Wallet (.pkpass), you need:\n\n1. Apple Developer Account ($99/year)\n2. Developer Certificates\n3. Configure them in /api/create-pass.js\n\nFor now, use the VCard download or Share features!'));
+            }
+        } catch (error) {
+            console.error('Wallet error:', error);
+            alert('Could not connect to wallet service. Using local mode - download VCard instead!');
+        }
     });
 
     // Reset
